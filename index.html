@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Ev Ekranı</title>
+<style>
+  /* Landscape home display (Fire HD 10), plain CSS + ES5 JS for wide compatibility */
+  html, body { margin: 0; padding: 0; height: 100%; }
+  body {
+    background: #102A33;
+    color: #E8EEF0;
+    font-family: "Avenir Next", "Avenir", Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    overflow: hidden;
+  }
+  .wrap {
+    height: 100%;
+    box-sizing: border-box;
+    padding: 24px 40px;
+    display: -webkit-flex; display: flex;
+    -webkit-flex-direction: column; flex-direction: column;
+  }
+
+  /* Top area: two columns side by side */
+  .top { display: -webkit-flex; display: flex; -webkit-flex: 1; flex: 1; }
+  .left { -webkit-flex: 1.25; flex: 1.25; padding-right: 40px; }
+  .right {
+    -webkit-flex: 1; flex: 1;
+    border-left: 1px solid #24444F;
+    padding-left: 40px;
+  }
+
+  #clock { font-size: 150px; font-weight: 500; line-height: 0.9; letter-spacing: -4px; }
+  #date { font-size: 28px; color: #8FA8B0; margin-top: 12px; }
+  #holidayToday { font-size: 22px; color: #F2C14E; margin-top: 8px; }
+
+  #advice { margin-top: 26px; }
+  #adviceUmbrella { font-size: 40px; font-weight: 600; line-height: 1.2; }
+  #adviceClothes { font-size: 28px; line-height: 1.3; margin-top: 6px; }
+  #adviceRange { font-size: 20px; color: #8FA8B0; margin-top: 6px; }
+
+  /* Local weather */
+  .place { font-size: 20px; color: #8FA8B0; }
+  .nowRow { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; margin-top: 4px; }
+  #wIcon { font-size: 70px; line-height: 1; margin-right: 18px; }
+  #wTemp { font-size: 84px; font-weight: 500; line-height: 1; }
+  #wDesc { font-size: 22px; margin-top: 6px; }
+  #wExtra { font-size: 18px; color: #8FA8B0; margin-top: 4px; }
+  .days { display: -webkit-flex; display: flex; margin-top: 16px; }
+  .day { margin-right: 30px; text-align: center; font-size: 18px; color: #8FA8B0; }
+  .day b { display: block; font-size: 30px; font-weight: 400; margin: 2px 0; }
+  .day span { color: #E8EEF0; }
+
+  /* Turkey block */
+  .tr { margin-top: 22px; padding-top: 18px; border-top: 1px solid #24444F; }
+  .trRow { display: -webkit-flex; display: flex; -webkit-align-items: baseline; align-items: baseline; margin-top: 4px; }
+  #trClock { font-size: 56px; font-weight: 500; letter-spacing: -1px; margin-right: 24px; }
+  #trIcon { font-size: 36px; margin-right: 10px; }
+  #trTemp { font-size: 40px; font-weight: 500; }
+  #trDesc { font-size: 20px; color: #8FA8B0; margin-top: 2px; }
+
+  /* Bottom band */
+  .bottom { border-top: 1px solid #24444F; padding-top: 16px; margin-top: 16px; }
+  .holidays { display: -webkit-flex; display: flex; }
+  #nextHoliday, #nextHolidayTR { -webkit-flex: 1; flex: 1; font-size: 19px; color: #F2C14E; }
+  #eventYear { font-size: 20px; color: #8FA8B0; margin-top: 12px; }
+  #eventText {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 26px; line-height: 1.4; margin-top: 2px;
+    max-height: 2.8em; overflow: hidden;
+  }
+  #status { font-size: 13px; color: #5E7C86; margin-top: 6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="left">
+      <div id="clock">--:--</div>
+      <div id="date"></div>
+      <div id="holidayToday"></div>
+      <div id="advice">
+        <div id="adviceUmbrella"></div>
+        <div id="adviceClothes"></div>
+        <div id="adviceRange"></div>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="place" id="wCity"></div>
+      <div class="nowRow">
+        <div id="wIcon"></div>
+        <div id="wTemp">--°</div>
+      </div>
+      <div id="wDesc">Hava durumu yükleniyor</div>
+      <div id="wExtra"></div>
+      <div class="days" id="days"></div>
+
+      <div class="tr">
+        <div class="place" id="trCity"></div>
+        <div class="trRow">
+          <div id="trClock">--:--</div>
+          <div id="trIcon"></div>
+          <div id="trTemp"></div>
+        </div>
+        <div id="trDesc"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom">
+    <div class="holidays">
+      <div id="nextHoliday"></div>
+      <div id="nextHolidayTR"></div>
+    </div>
+    <div id="eventYear"></div>
+    <div id="eventText">Bugün tarihte yükleniyor</div>
+    <div id="status"></div>
+  </div>
+</div>
+
+<script>
+// ===== SETTINGS =====
+var CITY_NAME = "Fort Lee";
+var LAT = 40.85;
+var LON = -73.97;
+
+var TR_CITY_NAME = "İstanbul";   // change to your city in Turkey
+var TR_LAT = 41.01;
+var TR_LON = 28.98;
+var TR_UTC_OFFSET = 3;           // Turkey is UTC+3 all year (no daylight saving)
+
+var HOLIDAY_COUNTRY = "US";
+var HOLIDAY_COUNTRY_2 = "TR";
+var RELOAD_MINUTES = 30;
+var EVENT_ROTATE_SECONDS = 20;
+// ====================
+
+var AYLAR = ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
+var GUNLER = ["Pazar","Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi"];
+var KISA_GUN = ["Paz","Pzt","Sal","Çar","Per","Cum","Cmt"];
+
+function pad(n) { return n < 10 ? "0" + n : "" + n; }
+function el(id) { return document.getElementById(id); }
+
+function getJSON(url, onOk, onFail) {
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", url, true);
+  xhr.timeout = 15000;
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState !== 4) return;
+    if (xhr.status >= 200 && xhr.status < 300) {
+      try { onOk(JSON.parse(xhr.responseText)); }
+      catch (e) { if (onFail) onFail(); }
+    } else if (onFail) { onFail(); }
+  };
+  xhr.ontimeout = function () { if (onFail) onFail(); };
+  xhr.send();
+}
+
+// ---- Clocks ----
+function tick() {
+  var d = new Date();
+  el("clock").innerHTML = pad(d.getHours()) + ":" + pad(d.getMinutes());
+  el("date").innerHTML = d.getDate() + " " + AYLAR[d.getMonth()] + " " + d.getFullYear() + ", " + GUNLER[d.getDay()];
+
+  // Turkey time from UTC
+  var utcMs = d.getTime() + d.getTimezoneOffset() * 60000;
+  var t = new Date(utcMs + TR_UTC_OFFSET * 3600000);
+  var dayNote = "";
+  if (t.getDate() !== d.getDate()) dayNote = " <span style='font-size:20px;color:#8FA8B0'>" + KISA_GUN[t.getDay()] + "</span>";
+  el("trClock").innerHTML = pad(t.getHours()) + ":" + pad(t.getMinutes()) + dayNote;
+}
+el("trCity").innerHTML = "🇹🇷 " + TR_CITY_NAME;
+tick();
+setInterval(tick, 1000);
+
+// ---- Weather codes ----
+function weatherInfo(code) {
+  if (code === 0) return ["☀️", "Açık"];
+  if (code === 1) return ["🌤", "Az bulutlu"];
+  if (code === 2) return ["⛅️", "Parçalı bulutlu"];
+  if (code === 3) return ["☁️", "Kapalı"];
+  if (code === 45 || code === 48) return ["🌫", "Sisli"];
+  if (code >= 51 && code <= 57) return ["🌦", "Çisenti"];
+  if (code >= 61 && code <= 67) return ["🌧", "Yağmurlu"];
+  if (code >= 71 && code <= 77) return ["❄️", "Karlı"];
+  if (code >= 80 && code <= 82) return ["🌦", "Sağanak"];
+  if (code === 85 || code === 86) return ["🌨", "Kar sağanağı"];
+  if (code >= 95) return ["⛈", "Gök gürültülü"];
+  return ["🌡", ""];
+}
+
+// ---- Local weather + umbrella/clothing advice ----
+function loadWeather() {
+  var url = "https://api.open-meteo.com/v1/forecast?latitude=" + LAT + "&longitude=" + LON +
+    "&current=temperature_2m,apparent_temperature,weather_code,relative_humidity_2m,wind_speed_10m" +
+    "&daily=weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min," +
+    "precipitation_probability_max,precipitation_sum&timezone=auto&forecast_days=4";
+  getJSON(url, function (data) {
+    var c = data.current;
+    var info = weatherInfo(c.weather_code);
+    el("wCity").innerHTML = CITY_NAME;
+    el("wIcon").innerHTML = info[0];
+    el("wTemp").innerHTML = Math.round(c.temperature_2m) + "°";
+    el("wDesc").innerHTML = info[1] + ", hissedilen " + Math.round(c.apparent_temperature) + "°";
+    el("wExtra").innerHTML = "Nem %" + c.relative_humidity_2m + ", rüzgar " + Math.round(c.wind_speed_10m) + " km/s";
+
+    var todayCode = data.daily.weather_code[0];
+    var pop = data.daily.precipitation_probability_max[0] || 0;
+    var rain = data.daily.precipitation_sum[0] || 0;
+    var fMin = Math.round(data.daily.apparent_temperature_min[0]);
+    var fMax = Math.round(data.daily.apparent_temperature_max[0]);
+
+    var umbrella;
+    if ((todayCode >= 71 && todayCode <= 77) || todayCode === 85 || todayCode === 86) {
+      umbrella = "❄️ Kar bekleniyor, bot giy";
+    } else if (pop >= 40 || rain >= 1) {
+      umbrella = "☂️ Şemsiye al, yağış ihtimali %" + pop;
+    } else {
+      umbrella = "Şemsiye gerekmez, yağış ihtimali %" + pop;
+    }
+
+    var clothes;
+    if (fMin < 0) clothes = "Kalın mont, bere ve eldiven";
+    else if (fMin < 8) clothes = "Mont giy";
+    else if (fMin < 14) clothes = "Ceket veya kalın hırka";
+    else if (fMin < 20) clothes = "İnce ceket veya hırka yeterli";
+    else if (fMin < 26) clothes = "Tişört yeterli";
+    else clothes = "Hafif giyin, yanına su al";
+    if (fMax - fMin >= 10) clothes += ", gün içinde çok değişiyor, katmanlı giyin";
+
+    el("adviceUmbrella").innerHTML = umbrella;
+    el("adviceClothes").innerHTML = clothes;
+    el("adviceRange").innerHTML = "Bugün hissedilen " + fMin + "° ile " + fMax + "° arası";
+
+    var html = "";
+    for (var i = 1; i < data.daily.time.length; i++) {
+      var parts = data.daily.time[i].split("-");
+      var dd = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+      var di = weatherInfo(data.daily.weather_code[i]);
+      html += '<div class="day">' + KISA_GUN[dd.getDay()] + "<b>" + di[0] + "</b><span>" +
+        Math.round(data.daily.temperature_2m_max[i]) + "°</span> " +
+        Math.round(data.daily.temperature_2m_min[i]) + "°</div>";
+    }
+    el("days").innerHTML = html;
+  }, function () {
+    el("wDesc").innerHTML = "Hava durumu alınamadı, internet bağlantısını kontrol edin";
+  });
+}
+
+// ---- Turkey weather ----
+function loadTrWeather() {
+  var url = "https://api.open-meteo.com/v1/forecast?latitude=" + TR_LAT + "&longitude=" + TR_LON +
+    "&current=temperature_2m,apparent_temperature,weather_code" +
+    "&daily=temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=1";
+  getJSON(url, function (data) {
+    var c = data.current;
+    var info = weatherInfo(c.weather_code);
+    el("trIcon").innerHTML = info[0];
+    el("trTemp").innerHTML = Math.round(c.temperature_2m) + "°";
+    el("trDesc").innerHTML = info[1] + ", bugün " + Math.round(data.daily.temperature_2m_min[0]) +
+      "° / " + Math.round(data.daily.temperature_2m_max[0]) + "°";
+  }, function () {
+    el("trDesc").innerHTML = "Hava durumu alınamadı";
+  });
+}
+
+// ---- On this day (Wikipedia) ----
+var events = [];
+var eventIndex = 0;
+
+function showEvent() {
+  if (!events.length) return;
+  var e = events[eventIndex % events.length];
+  el("eventYear").innerHTML = "Bugün tarihte, " + e.year;
+  el("eventText").innerHTML = e.text;
+  eventIndex++;
+}
+
+function useWikiData(data) {
+  var list = (data.selected && data.selected.length) ? data.selected : (data.events || []);
+  events = [];
+  for (var i = 0; i < list.length; i++) {
+    if (list[i].text && list[i].year) events.push({ year: list[i].year, text: list[i].text });
+  }
+  if (data.holidays && data.holidays.length) {
+    var names = [];
+    for (var j = 0; j < data.holidays.length && j < 2; j++) names.push(data.holidays[j].text);
+    el("holidayToday").innerHTML = "Bugün: " + names.join(", ");
+  }
+  showEvent();
+}
+
+function loadWiki() {
+  var d = new Date();
+  var mm = pad(d.getMonth() + 1);
+  var dd = pad(d.getDate());
+  var trUrl = "https://tr.wikipedia.org/api/rest_v1/feed/onthisday/all/" + mm + "/" + dd;
+  var enUrl = "https://en.wikipedia.org/api/rest_v1/feed/onthisday/all/" + mm + "/" + dd;
+  getJSON(trUrl, function (data) {
+    if ((data.selected && data.selected.length) || (data.events && data.events.length)) useWikiData(data);
+    else getJSON(enUrl, useWikiData, wikiFail);
+  }, function () {
+    getJSON(enUrl, useWikiData, wikiFail);
+  });
+}
+function wikiFail() { el("eventText").innerHTML = "Tarih bilgisi alınamadı"; }
+
+// ---- Next public holidays (Nager.Date) ----
+function loadHolidays(country, targetId, label) {
+  getJSON("https://date.nager.at/api/v3/NextPublicHolidays/" + country, function (list) {
+    if (!list || !list.length) return;
+    var h = list[0];
+    var p = h.date.split("-");
+    var hd = new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10));
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var days = Math.round((hd - today) / 86400000);
+    var when = days === 0 ? "bugün" : (days === 1 ? "yarın" : days + " gün sonra");
+    el(targetId).innerHTML = label + ": " + h.localName + ", " +
+      hd.getDate() + " " + AYLAR[hd.getMonth()] + " (" + when + ")";
+  }, function () {});
+}
+
+// ---- Start ----
+loadWeather();
+loadTrWeather();
+loadWiki();
+loadHolidays(HOLIDAY_COUNTRY, "nextHoliday", "ABD'de sıradaki tatil");
+loadHolidays(HOLIDAY_COUNTRY_2, "nextHolidayTR", "Türkiye'de sıradaki tatil");
+setInterval(showEvent, EVENT_ROTATE_SECONDS * 1000);
+setInterval(loadWeather, 15 * 60 * 1000);
+setInterval(loadTrWeather, 15 * 60 * 1000);
+setTimeout(function () { location.reload(); }, RELOAD_MINUTES * 60 * 1000);
+
+var now = new Date();
+el("status").innerHTML = "Son güncelleme " + pad(now.getHours()) + ":" + pad(now.getMinutes());
+</script>
+</body>
+</html>
