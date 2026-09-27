@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Ev Ekranı</title>
 <style>
-  /* Landscape home display (Fire HD 10), plain CSS + ES5 JS for wide compatibility */
+  /* Landscape home display (Fire HD 10), plain CSS + ES5 JS */
   html, body { margin: 0; padding: 0; height: 100%; }
   body {
     background: #F6F3EC;
@@ -16,78 +16,105 @@
   .wrap {
     height: 100%;
     box-sizing: border-box;
-    padding: 24px 40px;
+    padding: 20px 36px 16px;
     display: -webkit-flex; display: flex;
     -webkit-flex-direction: column; flex-direction: column;
   }
 
-  /* Top area: two columns side by side */
-  .top { display: -webkit-flex; display: flex; -webkit-flex: 1; flex: 1; }
-  .left { -webkit-flex: 1.3; flex: 1.3; padding-right: 32px; }
+  /* ---------- Top row: three columns ---------- */
+  .top { display: -webkit-flex; display: flex; }
+  .left { -webkit-flex: 1.3; flex: 1.3; padding-right: 28px; }
   .right {
     -webkit-flex: 1; flex: 1;
     border-left: 1px solid #DDD6C8;
-    padding-left: 32px; padding-right: 24px;
+    padding-left: 28px; padding-right: 20px;
   }
   .dino {
-    width: 270px;
+    width: 230px;
     border-left: 1px solid #DDD6C8;
-    padding-left: 24px;
+    padding-left: 20px;
     text-align: center;
   }
-  .dinoLabel { font-size: 18px; color: #6B7A80; }
+
+  #clock { font-size: 118px; font-weight: 500; line-height: 0.9; letter-spacing: -3px; }
+  #date { font-size: 24px; color: #6B7A80; margin-top: 10px; }
+  #holidayToday { font-size: 18px; color: #A8620A; margin-top: 6px; }
+  #advice { margin-top: 16px; }
+  #adviceUmbrella { font-size: 30px; font-weight: 600; line-height: 1.2; }
+  #adviceClothes { font-size: 22px; line-height: 1.3; margin-top: 4px; }
+  #adviceRange { font-size: 17px; color: #6B7A80; margin-top: 4px; }
+
+  .place { font-size: 18px; color: #6B7A80; }
+  .nowRow { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; }
+  #wIcon { font-size: 50px; line-height: 1; margin-right: 14px; }
+  #wTemp { font-size: 64px; font-weight: 500; line-height: 1.05; }
+  #wDesc { font-size: 19px; margin-top: 2px; }
+  #wExtra { font-size: 15px; color: #6B7A80; margin-top: 2px; }
+  .days { display: -webkit-flex; display: flex; margin-top: 10px; }
+  .day { margin-right: 24px; text-align: center; font-size: 15px; color: #6B7A80; }
+  .day b { display: block; font-size: 24px; font-weight: 400; margin: 1px 0; }
+  .day span { color: #1F2A30; }
+
+  .tr { margin-top: 12px; padding-top: 10px; border-top: 1px solid #DDD6C8; }
+  .trRow { display: -webkit-flex; display: flex; -webkit-align-items: baseline; align-items: baseline; }
+  #trClock { font-size: 42px; font-weight: 500; margin-right: 18px; }
+  #trIcon { font-size: 28px; margin-right: 8px; }
+  #trTemp { font-size: 32px; font-weight: 500; }
+  #trDesc { font-size: 16px; color: #6B7A80; }
+
+  .dinoLabel { font-size: 16px; color: #6B7A80; }
   .dinoFrame {
-    height: 400px; margin-top: 10px;
-    background: #FFFFFF; border-radius: 18px;
+    height: 230px; margin-top: 8px;
+    background: #FFFFFF; border-radius: 16px;
     display: -webkit-flex; display: flex;
     -webkit-align-items: center; align-items: center;
     -webkit-justify-content: center; justify-content: center;
     overflow: hidden;
   }
   #dinoImg { max-width: 100%; max-height: 100%; }
-  #dinoName { font-size: 26px; font-weight: 600; margin-top: 12px; }
-  #dinoHint { font-size: 14px; color: #9AA5A9; margin-top: 4px; }
+  #dinoName { font-size: 22px; font-weight: 600; margin-top: 8px; }
+  #dinoHint { font-size: 12px; color: #9AA5A9; margin-top: 2px; }
 
-  #clock { font-size: 150px; font-weight: 500; line-height: 0.9; letter-spacing: -4px; }
-  #date { font-size: 28px; color: #6B7A80; margin-top: 12px; }
-  #holidayToday { font-size: 22px; color: #A8620A; margin-top: 8px; }
-
-  #advice { margin-top: 26px; }
-  #adviceUmbrella { font-size: 36px; font-weight: 600; line-height: 1.2; }
-  #adviceClothes { font-size: 28px; line-height: 1.3; margin-top: 6px; }
-  #adviceRange { font-size: 20px; color: #6B7A80; margin-top: 6px; }
-
-  /* Local weather */
-  .place { font-size: 20px; color: #6B7A80; }
-  .nowRow { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; margin-top: 4px; }
-  #wIcon { font-size: 70px; line-height: 1; margin-right: 18px; }
-  #wTemp { font-size: 84px; font-weight: 500; line-height: 1; }
-  #wDesc { font-size: 22px; margin-top: 6px; }
-  #wExtra { font-size: 18px; color: #6B7A80; margin-top: 4px; }
-  .days { display: -webkit-flex; display: flex; margin-top: 16px; }
-  .day { margin-right: 30px; text-align: center; font-size: 18px; color: #6B7A80; }
-  .day b { display: block; font-size: 30px; font-weight: 400; margin: 2px 0; }
-  .day span { color: #1F2A30; }
-
-  /* Turkey block */
-  .tr { margin-top: 22px; padding-top: 18px; border-top: 1px solid #DDD6C8; }
-  .trRow { display: -webkit-flex; display: flex; -webkit-align-items: baseline; align-items: baseline; margin-top: 4px; }
-  #trClock { font-size: 56px; font-weight: 500; letter-spacing: -1px; margin-right: 24px; }
-  #trIcon { font-size: 36px; margin-right: 10px; }
-  #trTemp { font-size: 40px; font-weight: 500; }
-  #trDesc { font-size: 20px; color: #6B7A80; margin-top: 2px; }
-
-  /* Bottom band */
-  .bottom { border-top: 1px solid #DDD6C8; padding-top: 16px; margin-top: 16px; }
-  .holidays { display: -webkit-flex; display: flex; }
-  #nextHoliday, #nextHolidayTR { -webkit-flex: 1; flex: 1; font-size: 19px; color: #A8620A; }
-  #eventYear { font-size: 20px; color: #6B7A80; margin-top: 12px; }
-  #eventText {
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 26px; line-height: 1.4; margin-top: 2px;
-    max-height: 2.8em; overflow: hidden;
+  /* ---------- Holidays ---------- */
+  .holidays {
+    display: -webkit-flex; display: flex;
+    border-top: 1px solid #DDD6C8;
+    margin-top: 14px; padding-top: 10px;
   }
-  #status { font-size: 13px; color: #9AA5A9; margin-top: 6px; }
+  #nextHoliday, #nextHolidayTR { -webkit-flex: 1; flex: 1; font-size: 17px; color: #A8620A; }
+
+  /* ---------- Weekly calendar ---------- */
+  .week {
+    display: -webkit-flex; display: flex;
+    margin-top: 10px;
+    -webkit-flex: 1; flex: 1;
+    min-height: 0;
+  }
+  .wday {
+    -webkit-flex: 1; flex: 1;
+    background: #FFFFFF;
+    border-radius: 12px;
+    margin-right: 8px;
+    padding: 8px 10px;
+    overflow: hidden;
+    min-width: 0;
+  }
+  .wday:last-child { margin-right: 0; }
+  .wday.today { background: #1F2A30; color: #F6F3EC; }
+  .wdHead { font-size: 15px; color: #6B7A80; margin-bottom: 6px; }
+  .wday.today .wdHead { color: #C9D2D5; }
+  .wdHead b { font-size: 22px; color: #1F2A30; font-weight: 600; margin-right: 4px; }
+  .wday.today .wdHead b { color: #FFFFFF; }
+  .item { font-size: 15px; line-height: 1.3; margin-bottom: 5px; }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 4px; margin-right: 5px; vertical-align: 1px; }
+  .time { font-weight: 600; }
+  .more { font-size: 13px; color: #9AA5A9; }
+  .calMsg { font-size: 15px; color: #9AA5A9; padding: 8px 0; }
+
+  /* ---------- On this day ---------- */
+  .history { margin-top: 10px; font-size: 16px; line-height: 1.35; max-height: 2.7em; overflow: hidden; }
+  #eventYear { color: #6B7A80; margin-right: 6px; }
+  #eventText { font-family: Georgia, "Times New Roman", serif; font-size: 18px; }
 </style>
 </head>
 <body>
@@ -113,7 +140,6 @@
       <div id="wDesc">Hava durumu yükleniyor</div>
       <div id="wExtra"></div>
       <div class="days" id="days"></div>
-
       <div class="tr">
         <div class="place" id="trCity"></div>
         <div class="trRow">
@@ -133,15 +159,14 @@
     </div>
   </div>
 
-  <div class="bottom">
-    <div class="holidays">
-      <div id="nextHoliday"></div>
-      <div id="nextHolidayTR"></div>
-    </div>
-    <div id="eventYear"></div>
-    <div id="eventText">Bugün tarihte yükleniyor</div>
-    <div id="status"></div>
+  <div class="holidays">
+    <div id="nextHoliday"></div>
+    <div id="nextHolidayTR"></div>
   </div>
+
+  <div class="week" id="week"></div>
+
+  <div class="history"><span id="eventYear"></span><span id="eventText"></span></div>
 </div>
 
 <script>
@@ -150,13 +175,19 @@ var CITY_NAME = "Fort Lee";
 var LAT = 40.85;
 var LON = -73.97;
 
-var TR_CITY_NAME = "İstanbul";   // change to your city in Turkey
+var TR_CITY_NAME = "İstanbul";
 var TR_LAT = 41.01;
 var TR_LON = 28.98;
-var TR_UTC_OFFSET = 3;           // Turkey is UTC+3 all year (no daylight saving)
+var TR_UTC_OFFSET = 3;           // Turkey is UTC+3 all year
 
 var HOLIDAY_COUNTRY = "US";
 var HOLIDAY_COUNTRY_2 = "TR";
+
+// Weekly calendar: paste the ID of the Google Sheet linked to your Google Form.
+// It is the long part of the sheet link between /d/ and /edit
+var CAL_SHEET_ID = "1b7Q-yEIJNsuL8-UumPdCugfGkI3aOzfO76vM6MFS6lo";
+var CAL_SHEET_GID = "2036674537";         // tab id (gid=... in the sheet link), usually 0
+
 var RELOAD_MINUTES = 30;
 var EVENT_ROTATE_SECONDS = 20;
 // ====================
@@ -167,6 +198,7 @@ var KISA_GUN = ["Paz","Pzt","Sal","Çar","Per","Cum","Cmt"];
 
 function pad(n) { return n < 10 ? "0" + n : "" + n; }
 function el(id) { return document.getElementById(id); }
+function esc(t) { return String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
 
 function getJSON(url, onOk, onFail) {
   var xhr = new XMLHttpRequest();
@@ -183,24 +215,22 @@ function getJSON(url, onOk, onFail) {
   xhr.send();
 }
 
-// ---- Clocks ----
+// ---------- Clocks ----------
 function tick() {
   var d = new Date();
   el("clock").innerHTML = pad(d.getHours()) + ":" + pad(d.getMinutes());
   el("date").innerHTML = d.getDate() + " " + AYLAR[d.getMonth()] + " " + d.getFullYear() + ", " + GUNLER[d.getDay()];
-
-  // Turkey time from UTC
   var utcMs = d.getTime() + d.getTimezoneOffset() * 60000;
   var t = new Date(utcMs + TR_UTC_OFFSET * 3600000);
   var dayNote = "";
-  if (t.getDate() !== d.getDate()) dayNote = " <span style='font-size:20px;color:#6B7A80'>" + KISA_GUN[t.getDay()] + "</span>";
+  if (t.getDate() !== d.getDate()) dayNote = " <span style='font-size:18px;color:#6B7A80'>" + KISA_GUN[t.getDay()] + "</span>";
   el("trClock").innerHTML = pad(t.getHours()) + ":" + pad(t.getMinutes()) + dayNote;
 }
 el("trCity").innerHTML = "🇹🇷 " + TR_CITY_NAME;
 tick();
 setInterval(tick, 1000);
 
-// ---- Weather codes ----
+// ---------- Weather ----------
 function weatherInfo(code) {
   if (code === 0) return ["☀️", "Açık"];
   if (code === 1) return ["🌤", "Az bulutlu"];
@@ -216,7 +246,6 @@ function weatherInfo(code) {
   return ["🌡", ""];
 }
 
-// ---- Local weather + umbrella/clothing advice ----
 function loadWeather() {
   var url = "https://api.open-meteo.com/v1/forecast?latitude=" + LAT + "&longitude=" + LON +
     "&current=temperature_2m,apparent_temperature,weather_code,relative_humidity_2m,wind_speed_10m" +
@@ -238,13 +267,9 @@ function loadWeather() {
     var fMax = Math.round(data.daily.apparent_temperature_max[0]);
 
     var umbrella;
-    if ((todayCode >= 71 && todayCode <= 77) || todayCode === 85 || todayCode === 86) {
-      umbrella = "❄️ Kar bekleniyor, bot giy";
-    } else if (pop >= 40 || rain >= 1) {
-      umbrella = "☂️ Şemsiye al, yağış ihtimali %" + pop;
-    } else {
-      umbrella = "Şemsiye gerekmez, yağış ihtimali %" + pop;
-    }
+    if ((todayCode >= 71 && todayCode <= 77) || todayCode === 85 || todayCode === 86) umbrella = "❄️ Kar bekleniyor, bot giy";
+    else if (pop >= 40 || rain >= 1) umbrella = "☂️ Şemsiye al, yağış ihtimali %" + pop;
+    else umbrella = "Şemsiye gerekmez, yağış ihtimali %" + pop;
 
     var clothes;
     if (fMin < 0) clothes = "Kalın mont, bere ve eldiven";
@@ -270,35 +295,126 @@ function loadWeather() {
     }
     el("days").innerHTML = html;
   }, function () {
-    el("wDesc").innerHTML = "Hava durumu alınamadı, internet bağlantısını kontrol edin";
+    el("wDesc").innerHTML = "Hava durumu alınamadı";
   });
 }
 
-// ---- Turkey weather ----
 function loadTrWeather() {
   var url = "https://api.open-meteo.com/v1/forecast?latitude=" + TR_LAT + "&longitude=" + TR_LON +
-    "&current=temperature_2m,apparent_temperature,weather_code" +
-    "&daily=temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=1";
+    "&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=1";
   getJSON(url, function (data) {
-    var c = data.current;
-    var info = weatherInfo(c.weather_code);
+    var info = weatherInfo(data.current.weather_code);
     el("trIcon").innerHTML = info[0];
-    el("trTemp").innerHTML = Math.round(c.temperature_2m) + "°";
+    el("trTemp").innerHTML = Math.round(data.current.temperature_2m) + "°";
     el("trDesc").innerHTML = info[1] + ", bugün " + Math.round(data.daily.temperature_2m_min[0]) +
       "° / " + Math.round(data.daily.temperature_2m_max[0]) + "°";
-  }, function () {
-    el("trDesc").innerHTML = "Hava durumu alınamadı";
-  });
+  }, function () { el("trDesc").innerHTML = "Hava durumu alınamadı"; });
 }
 
-// ---- On this day (Wikipedia) ----
+// ---------- Weekly calendar (Google Form -> Google Sheet) ----------
+var NAME_COLORS = ["#2E6FB7", "#C2477A", "#3A8F5C", "#8A5CC2"];
+var nameColorMap = {};
+var nameCount = 0;
+
+function colorFor(name) {
+  if (!name) return "#9AA5A9";
+  if (!nameColorMap[name]) { nameColorMap[name] = NAME_COLORS[nameCount % NAME_COLORS.length]; nameCount++; }
+  return nameColorMap[name];
+}
+
+// Google returns dates as "Date(2026,8,28)" (month is 0-based) and times as "Date(1899,11,30,9,30,0)"
+function parseGDate(v) {
+  if (!v) return null;
+  var m = /Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+))?/.exec(v);
+  if (!m) return null;
+  return { y: +m[1], mo: +m[2], d: +m[3], h: m[4] ? +m[4] : null, mi: m[5] ? +m[5] : null };
+}
+
+function dayKey(y, mo, d) { return y + "-" + mo + "-" + d; }
+
+function drawWeek(itemsByDay) {
+  var html = "";
+  var today = new Date();
+  for (var i = 0; i < 7; i++) {
+    var d = new Date(today.getFullYear(), today.getMonth(), today.getDate() + i);
+    var key = dayKey(d.getFullYear(), d.getMonth(), d.getDate());
+    var list = itemsByDay ? (itemsByDay[key] || []) : [];
+    list.sort(function (a, b) { return a.sort - b.sort; });
+
+    html += '<div class="wday' + (i === 0 ? ' today' : '') + '"><div class="wdHead"><b>' + d.getDate() + "</b>" +
+      (i === 0 ? "Bugün" : KISA_GUN[d.getDay()]) + "</div>";
+    var maxShow = 4;
+    for (var j = 0; j < list.length && j < maxShow; j++) {
+      var it = list[j];
+      html += '<div class="item"><span class="dot" style="background:' + colorFor(it.who) + '"></span>' +
+        (it.time ? '<span class="time">' + it.time + "</span> " : "") + esc(it.text) + "</div>";
+    }
+    if (list.length > maxShow) html += '<div class="more">+' + (list.length - maxShow) + " not daha</div>";
+    html += "</div>";
+  }
+  el("week").innerHTML = html;
+}
+
+window.onCalendar = function (resp) {
+  if (!resp || resp.status === "error" || !resp.table) { calMessage("Takvim okunamadı, tablonun paylaşım ayarını kontrol edin"); return; }
+  var cols = resp.table.cols;
+  var iDate = -1, iText = -1, iWho = -1, iTime = -1;
+  for (var c = 0; c < cols.length; c++) {
+    var label = (cols[c].label || "").toLowerCase();
+    if (label.indexOf("tarih") >= 0 && iDate < 0) iDate = c;
+    else if (label.indexOf("not") >= 0 && iText < 0) iText = c;
+    else if (label.indexOf("kim") >= 0 && iWho < 0) iWho = c;
+    else if (label.indexOf("saat") >= 0 && iTime < 0) iTime = c;
+  }
+  if (iDate < 0 || iText < 0) { calMessage("Formda 'Tarih' ve 'Not' soruları bulunamadı"); return; }
+
+  var byDay = {};
+  var rows = resp.table.rows || [];
+  for (var r = 0; r < rows.length; r++) {
+    var cells = rows[r].c;
+    if (!cells || !cells[iDate] || !cells[iText] || !cells[iText].v) continue;
+    var gd = parseGDate(cells[iDate].v);
+    if (!gd) continue;
+    var who = (iWho >= 0 && cells[iWho] && cells[iWho].v) ? cells[iWho].v : "";
+    colorFor(who);  // fix each person's color in sheet order
+    var time = "", sortVal = 9999;
+    if (iTime >= 0 && cells[iTime] && cells[iTime].v) {
+      var tv = cells[iTime].v;
+      if (typeof tv === "object" && tv.length) { time = pad(tv[0]) + ":" + pad(tv[1]); sortVal = tv[0] * 60 + tv[1]; }
+      else { var gt = parseGDate(tv); if (gt && gt.h !== null) { time = pad(gt.h) + ":" + pad(gt.mi); sortVal = gt.h * 60 + gt.mi; } }
+    }
+    var key = dayKey(gd.y, gd.mo, gd.d);
+    if (!byDay[key]) byDay[key] = [];
+    byDay[key].push({ text: cells[iText].v, who: who, time: time, sort: sortVal });
+  }
+  drawWeek(byDay);
+};
+
+function calMessage(msg) {
+  drawWeek(null);
+  el("week").innerHTML = el("week").innerHTML.replace('<div class="wdHead">', '<div class="calMsg">' + msg + '</div><div class="wdHead">');
+}
+
+function loadCalendar() {
+  if (!CAL_SHEET_ID || CAL_SHEET_ID === "BURAYA_SHEET_ID") { calMessage("Takvim bağlantısı henüz ayarlanmadı"); return; }
+  var old = el("calScript");
+  if (old) old.parentNode.removeChild(old);
+  var s = document.createElement("script");
+  s.id = "calScript";
+  s.src = "https://docs.google.com/spreadsheets/d/" + CAL_SHEET_ID + "/gviz/tq?gid=" + CAL_SHEET_GID +
+    "&headers=1&tqx=out:json;responseHandler:onCalendar&_=" + new Date().getTime();
+  s.onerror = function () { calMessage("Takvim yüklenemedi"); };
+  document.body.appendChild(s);
+}
+
+// ---------- On this day (Wikipedia) ----------
 var events = [];
 var eventIndex = 0;
 
 function showEvent() {
   if (!events.length) return;
   var e = events[eventIndex % events.length];
-  el("eventYear").innerHTML = "Bugün tarihte, " + e.year;
+  el("eventYear").innerHTML = "Bugün tarihte, " + e.year + ":";
   el("eventText").innerHTML = e.text;
   eventIndex++;
 }
@@ -325,14 +441,11 @@ function loadWiki() {
   var enUrl = "https://en.wikipedia.org/api/rest_v1/feed/onthisday/all/" + mm + "/" + dd;
   getJSON(trUrl, function (data) {
     if ((data.selected && data.selected.length) || (data.events && data.events.length)) useWikiData(data);
-    else getJSON(enUrl, useWikiData, wikiFail);
-  }, function () {
-    getJSON(enUrl, useWikiData, wikiFail);
-  });
+    else getJSON(enUrl, useWikiData, function () {});
+  }, function () { getJSON(enUrl, useWikiData, function () {}); });
 }
-function wikiFail() { el("eventText").innerHTML = "Tarih bilgisi alınamadı"; }
 
-// ---- Next public holidays (Nager.Date) ----
+// ---------- Holidays (Nager.Date) ----------
 function loadHolidays(country, targetId, label) {
   getJSON("https://date.nager.at/api/v3/NextPublicHolidays/" + country, function (list) {
     if (!list || !list.length) return;
@@ -342,12 +455,11 @@ function loadHolidays(country, targetId, label) {
     var today = new Date(); today.setHours(0, 0, 0, 0);
     var days = Math.round((hd - today) / 86400000);
     var when = days === 0 ? "bugün" : (days === 1 ? "yarın" : days + " gün sonra");
-    el(targetId).innerHTML = label + ": " + h.localName + ", " +
-      hd.getDate() + " " + AYLAR[hd.getMonth()] + " (" + when + ")";
+    el(targetId).innerHTML = label + ": " + h.localName + ", " + hd.getDate() + " " + AYLAR[hd.getMonth()] + " (" + when + ")";
   }, function () {});
 }
 
-// ---- Random dinosaur pictures (Wikipedia) ----
+// ---------- Dinosaurs (Wikipedia) ----------
 var DINOS = ["Tyrannosaurus","Triceratops","Stegosaurus","Velociraptor","Brachiosaurus",
   "Spinosaurus","Ankylosaurus","Parasaurolophus","Diplodocus","Pachycephalosaurus",
   "Allosaurus","Iguanodon","Apatosaurus","Brontosaurus","Carnotaurus","Dilophosaurus",
@@ -369,21 +481,22 @@ function loadDino(tries) {
 }
 el("dinoBox").onclick = function () { loadDino(0); };
 
-// ---- Start ----
-loadDino(0);
-setInterval(function () { loadDino(0); }, 3 * 60 * 1000);
+// ---------- Start ----------
+drawWeek(null);
 loadWeather();
 loadTrWeather();
+loadCalendar();
 loadWiki();
 loadHolidays(HOLIDAY_COUNTRY, "nextHoliday", "ABD'de sıradaki tatil");
 loadHolidays(HOLIDAY_COUNTRY_2, "nextHolidayTR", "Türkiye'de sıradaki tatil");
+loadDino(0);
+
 setInterval(showEvent, EVENT_ROTATE_SECONDS * 1000);
 setInterval(loadWeather, 15 * 60 * 1000);
 setInterval(loadTrWeather, 15 * 60 * 1000);
+setInterval(loadCalendar, 5 * 60 * 1000);
+setInterval(function () { loadDino(0); }, 3 * 60 * 1000);
 setTimeout(function () { location.reload(); }, RELOAD_MINUTES * 60 * 1000);
-
-var now = new Date();
-el("status").innerHTML = "Son güncelleme " + pad(now.getHours()) + ":" + pad(now.getMinutes());
 </script>
 </body>
 </html>
