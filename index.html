@@ -325,6 +325,10 @@ function colorFor(name) {
 // Google returns dates as "Date(2026,8,28)" (month is 0-based) and times as "Date(1899,11,30,9,30,0)"
 function parseGDate(v) {
   if (!v) return null;
+  var t = /^(\d{1,2})\.(\d{1,2})\.(\d{4})/.exec(v);
+  if (t) return { y: +t[3], mo: +t[2] - 1, d: +t[1], h: null, mi: null };
+  var iso = /^(\d{4})-(\d{2})-(\d{2})/.exec(v);
+  if (iso) return { y: +iso[1], mo: +iso[2] - 1, d: +iso[3], h: null, mi: null };
   var m = /Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+))?/.exec(v);
   if (!m) return null;
   return { y: +m[1], mo: +m[2], d: +m[3], h: m[4] ? +m[4] : null, mi: m[5] ? +m[5] : null };
@@ -361,12 +365,17 @@ window.onCalendar = function (resp) {
   var iDate = -1, iText = -1, iWho = -1, iTime = -1;
   for (var c = 0; c < cols.length; c++) {
     var label = (cols[c].label || "").toLowerCase();
+    if (label.indexOf("zaman") >= 0 || label.indexOf("timestamp") >= 0) continue;  // skip form timestamp
     if (label.indexOf("tarih") >= 0 && iDate < 0) iDate = c;
-    else if (label.indexOf("not") >= 0 && iText < 0) iText = c;
+    else if ((label.indexOf("not") >= 0 || label.indexOf("gorev") >= 0 || label.indexOf("görev") >= 0) && iText < 0) iText = c;
     else if (label.indexOf("kim") >= 0 && iWho < 0) iWho = c;
     else if (label.indexOf("saat") >= 0 && iTime < 0) iTime = c;
   }
-  if (iDate < 0 || iText < 0) { calMessage("Formda 'Tarih' ve 'Not' soruları bulunamadı"); return; }
+  // Fallback: use the first remaining column as the note text
+  if (iText < 0) {
+    for (var k = 1; k < cols.length; k++) { if (k !== iDate && k !== iWho && k !== iTime) { iText = k; break; } }
+  }
+  if (iDate < 0 || iText < 0) { calMessage("Formda 'Tarih' ve 'Görev' soruları bulunamadı"); return; }
 
   var byDay = {};
   var rows = resp.table.rows || [];
