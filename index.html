@@ -8,8 +8,8 @@
   /* Landscape home display (Fire HD 10), plain CSS + ES5 JS for wide compatibility */
   html, body { margin: 0; padding: 0; height: 100%; }
   body {
-    background: #102A33;
-    color: #E8EEF0;
+    background: #F6F3EC;
+    color: #1F2A30;
     font-family: "Avenir Next", "Avenir", Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
     overflow: hidden;
   }
@@ -23,53 +23,71 @@
 
   /* Top area: two columns side by side */
   .top { display: -webkit-flex; display: flex; -webkit-flex: 1; flex: 1; }
-  .left { -webkit-flex: 1.25; flex: 1.25; padding-right: 40px; }
+  .left { -webkit-flex: 1.3; flex: 1.3; padding-right: 32px; }
   .right {
     -webkit-flex: 1; flex: 1;
-    border-left: 1px solid #24444F;
-    padding-left: 40px;
+    border-left: 1px solid #DDD6C8;
+    padding-left: 32px; padding-right: 24px;
   }
+  .dino {
+    width: 270px;
+    border-left: 1px solid #DDD6C8;
+    padding-left: 24px;
+    text-align: center;
+  }
+  .dinoLabel { font-size: 18px; color: #6B7A80; }
+  .dinoFrame {
+    height: 400px; margin-top: 10px;
+    background: #FFFFFF; border-radius: 18px;
+    display: -webkit-flex; display: flex;
+    -webkit-align-items: center; align-items: center;
+    -webkit-justify-content: center; justify-content: center;
+    overflow: hidden;
+  }
+  #dinoImg { max-width: 100%; max-height: 100%; }
+  #dinoName { font-size: 26px; font-weight: 600; margin-top: 12px; }
+  #dinoHint { font-size: 14px; color: #9AA5A9; margin-top: 4px; }
 
   #clock { font-size: 150px; font-weight: 500; line-height: 0.9; letter-spacing: -4px; }
-  #date { font-size: 28px; color: #8FA8B0; margin-top: 12px; }
-  #holidayToday { font-size: 22px; color: #F2C14E; margin-top: 8px; }
+  #date { font-size: 28px; color: #6B7A80; margin-top: 12px; }
+  #holidayToday { font-size: 22px; color: #A8620A; margin-top: 8px; }
 
   #advice { margin-top: 26px; }
-  #adviceUmbrella { font-size: 40px; font-weight: 600; line-height: 1.2; }
+  #adviceUmbrella { font-size: 36px; font-weight: 600; line-height: 1.2; }
   #adviceClothes { font-size: 28px; line-height: 1.3; margin-top: 6px; }
-  #adviceRange { font-size: 20px; color: #8FA8B0; margin-top: 6px; }
+  #adviceRange { font-size: 20px; color: #6B7A80; margin-top: 6px; }
 
   /* Local weather */
-  .place { font-size: 20px; color: #8FA8B0; }
+  .place { font-size: 20px; color: #6B7A80; }
   .nowRow { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; margin-top: 4px; }
   #wIcon { font-size: 70px; line-height: 1; margin-right: 18px; }
   #wTemp { font-size: 84px; font-weight: 500; line-height: 1; }
   #wDesc { font-size: 22px; margin-top: 6px; }
-  #wExtra { font-size: 18px; color: #8FA8B0; margin-top: 4px; }
+  #wExtra { font-size: 18px; color: #6B7A80; margin-top: 4px; }
   .days { display: -webkit-flex; display: flex; margin-top: 16px; }
-  .day { margin-right: 30px; text-align: center; font-size: 18px; color: #8FA8B0; }
+  .day { margin-right: 30px; text-align: center; font-size: 18px; color: #6B7A80; }
   .day b { display: block; font-size: 30px; font-weight: 400; margin: 2px 0; }
-  .day span { color: #E8EEF0; }
+  .day span { color: #1F2A30; }
 
   /* Turkey block */
-  .tr { margin-top: 22px; padding-top: 18px; border-top: 1px solid #24444F; }
+  .tr { margin-top: 22px; padding-top: 18px; border-top: 1px solid #DDD6C8; }
   .trRow { display: -webkit-flex; display: flex; -webkit-align-items: baseline; align-items: baseline; margin-top: 4px; }
   #trClock { font-size: 56px; font-weight: 500; letter-spacing: -1px; margin-right: 24px; }
   #trIcon { font-size: 36px; margin-right: 10px; }
   #trTemp { font-size: 40px; font-weight: 500; }
-  #trDesc { font-size: 20px; color: #8FA8B0; margin-top: 2px; }
+  #trDesc { font-size: 20px; color: #6B7A80; margin-top: 2px; }
 
   /* Bottom band */
-  .bottom { border-top: 1px solid #24444F; padding-top: 16px; margin-top: 16px; }
+  .bottom { border-top: 1px solid #DDD6C8; padding-top: 16px; margin-top: 16px; }
   .holidays { display: -webkit-flex; display: flex; }
-  #nextHoliday, #nextHolidayTR { -webkit-flex: 1; flex: 1; font-size: 19px; color: #F2C14E; }
-  #eventYear { font-size: 20px; color: #8FA8B0; margin-top: 12px; }
+  #nextHoliday, #nextHolidayTR { -webkit-flex: 1; flex: 1; font-size: 19px; color: #A8620A; }
+  #eventYear { font-size: 20px; color: #6B7A80; margin-top: 12px; }
   #eventText {
     font-family: Georgia, "Times New Roman", serif;
     font-size: 26px; line-height: 1.4; margin-top: 2px;
     max-height: 2.8em; overflow: hidden;
   }
-  #status { font-size: 13px; color: #5E7C86; margin-top: 6px; }
+  #status { font-size: 13px; color: #9AA5A9; margin-top: 6px; }
 </style>
 </head>
 <body>
@@ -105,6 +123,13 @@
         </div>
         <div id="trDesc"></div>
       </div>
+    </div>
+
+    <div class="dino" id="dinoBox">
+      <div class="dinoLabel">🦖 Dinozor köşesi</div>
+      <div class="dinoFrame"><img id="dinoImg" alt=""></div>
+      <div id="dinoName">Yükleniyor</div>
+      <div id="dinoHint">Yeni dinozor için dokun</div>
     </div>
   </div>
 
@@ -168,7 +193,7 @@ function tick() {
   var utcMs = d.getTime() + d.getTimezoneOffset() * 60000;
   var t = new Date(utcMs + TR_UTC_OFFSET * 3600000);
   var dayNote = "";
-  if (t.getDate() !== d.getDate()) dayNote = " <span style='font-size:20px;color:#8FA8B0'>" + KISA_GUN[t.getDay()] + "</span>";
+  if (t.getDate() !== d.getDate()) dayNote = " <span style='font-size:20px;color:#6B7A80'>" + KISA_GUN[t.getDay()] + "</span>";
   el("trClock").innerHTML = pad(t.getHours()) + ":" + pad(t.getMinutes()) + dayNote;
 }
 el("trCity").innerHTML = "🇹🇷 " + TR_CITY_NAME;
@@ -322,7 +347,31 @@ function loadHolidays(country, targetId, label) {
   }, function () {});
 }
 
+// ---- Random dinosaur pictures (Wikipedia) ----
+var DINOS = ["Tyrannosaurus","Triceratops","Stegosaurus","Velociraptor","Brachiosaurus",
+  "Spinosaurus","Ankylosaurus","Parasaurolophus","Diplodocus","Pachycephalosaurus",
+  "Allosaurus","Iguanodon","Apatosaurus","Brontosaurus","Carnotaurus","Dilophosaurus",
+  "Gallimimus","Styracosaurus","Therizinosaurus","Microraptor","Argentinosaurus",
+  "Protoceratops","Oviraptor","Baryonyx","Giganotosaurus","Deinonychus","Edmontosaurus",
+  "Maiasaura","Compsognathus","Kentrosaurus","Archaeopteryx","Corythosaurus"];
+var lastDino = "";
+
+function loadDino(tries) {
+  if (tries > 5) return;
+  var name = DINOS[Math.floor(Math.random() * DINOS.length)];
+  if (name === lastDino) { loadDino(tries + 1); return; }
+  getJSON("https://en.wikipedia.org/api/rest_v1/page/summary/" + name, function (data) {
+    if (!data.thumbnail || !data.thumbnail.source) { loadDino(tries + 1); return; }
+    lastDino = name;
+    el("dinoImg").src = data.thumbnail.source;
+    el("dinoName").innerHTML = data.title;
+  }, function () { loadDino(tries + 1); });
+}
+el("dinoBox").onclick = function () { loadDino(0); };
+
 // ---- Start ----
+loadDino(0);
+setInterval(function () { loadDino(0); }, 3 * 60 * 1000);
 loadWeather();
 loadTrWeather();
 loadWiki();
